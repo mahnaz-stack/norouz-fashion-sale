@@ -1,4 +1,3 @@
-// داده‌های محصولات
 const products = [   
     {
         "id": 1,
@@ -158,7 +157,16 @@ const products = [
     },
 ]
 
-// سیستم سبد خرید
+function parsePrice(priceStr) {
+    if (!priceStr) return 0;
+    
+    const numericStr = priceStr.toString().replace(/[^\d,۰-۹]/g, '');
+
+    const persianToEnglish = numericStr.replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d));
+
+    return parseInt(persianToEnglish.replace(/,/g, '')) || 0;
+}
+
 const shoppingCart = {
     items: [], //لیست محصولات در سبد
     total: 0,  
@@ -198,17 +206,18 @@ const shoppingCart = {
             }
         }
     },
-    // updateCart() means: محاسبه کن-آپدیت کن
     updateCart() {
         this.count = this.items.reduce((total, item) => total + item.quantity, 0);
         this.total = this.items.reduce((total, item) => {
-            const price = parseInt(item.newPrice.replace(/,/g, ''));
+            const price = parsePrice(item.newPrice);
             return total + (price * item.quantity);
+            
         }, 0);
 
 
         this.updateCartUI();
-        
+        this.saveToLocalStorage();
+
     },
     
     updateCartUI() {
@@ -220,7 +229,6 @@ const shoppingCart = {
             setTimeout(() => cartCount.classList.remove('animate-pulse'), 300);
         }
 
-        //بروزرسانی شمارشگر در منوی موبایل
         const mobileCartCount = document.querySelector('.mobile-cart-count');
         if (mobileCartCount) {
             mobileCartCount.textContent = this.count;
@@ -258,11 +266,9 @@ function setupHamburgerMenu() {
         mobileOverlay.classList.toggle('active');
         document.body.style.overflow = mobileMenu.classList.contains('active') ? 'hidden' : '';
         
-        // انیمیشن تبدیل به X - کلاس open به active تغییر کرد
         this.classList.toggle('active');
     });
     
-    // بستن با دکمه X در منوی موبایل
     if (mobileCloseBtn) {
         mobileCloseBtn.addEventListener('click', function() {
             mobileMenu.classList.remove('active');
@@ -272,7 +278,6 @@ function setupHamburgerMenu() {
         });
     }
     
-    // بستن با کلیک روی overlay
     mobileOverlay.addEventListener('click', function() {
         mobileMenu.classList.remove('active');
         this.classList.remove('active');
@@ -280,7 +285,6 @@ function setupHamburgerMenu() {
         document.body.style.overflow = '';
     });
     
-    // بستن منو با کلیک روی لینک‌های منوی موبایل
     const mobileLinks = mobileMenu.querySelectorAll('.mobile-nav-links a');
     mobileLinks.forEach(link => {
         link.addEventListener('click', () => {
@@ -291,7 +295,6 @@ function setupHamburgerMenu() {
         });
     });
     
-    // بستن با کلید ESC
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
             mobileMenu.classList.remove('active');
@@ -301,7 +304,6 @@ function setupHamburgerMenu() {
         }
     });
     
-    // به‌روزرسانی تعداد سبد خرید در منوی موبایل
     function updateMobileCartCount() {
         const mobileCartCount = document.querySelector('.mobile-cart-count');
         if (mobileCartCount) {
@@ -309,22 +311,18 @@ function setupHamburgerMenu() {
         }
     }
     
-    // وقتی سبد خرید آپدیت شد، تعداد در منوی موبایل هم آپدیت شود
     const originalUpdateCart = shoppingCart.updateCart;
     shoppingCart.updateCart = function() {
         originalUpdateCart.call(this);
         updateMobileCartCount();
     };
     
-    // مقداردهی اولیه
     updateMobileCartCount();
 }
 
-// متغیرهای شمارش معکوس
 let countdownDate = new Date();
 countdownDate.setDate(countdownDate.getDate() + 5); // 5 روز بعد
 
-// ایجاد ستاره‌های رتبه‌بندی
 function createRatingStars(rating) {
     let stars = '';
     for (let i = 1; i <= 5; i++) {
@@ -337,39 +335,31 @@ function createRatingStars(rating) {
         }
     }
     
-    // تعداد نظرات تصادفی
     const reviewCount = Math.floor(Math.random() * 100) + 20;
     stars += `<span class="rating-count">(${reviewCount.toLocaleString('fa-IR')})</span>`;
     
     return stars;
 }
 
-// محاسبه تخفیف
 function calculateDiscount(oldPrice, newPrice) {
     const old = parseInt(oldPrice.replace(/,/g, ''));
     const newP = parseInt(newPrice.replace(/,/g, ''));
     return Math.round(((old - newP) / old) * 100);
 }
 
-// سیستم صفحه‌بندی
 let currentPage = 1;
 const productsPerPage = 6;
 
-// نمایش محصولات
-//for each production:
 function displayProducts(page = 1) {
     const productsContainer = document.getElementById('products-container');
     if (!productsContainer) return;
     
-    // محاسبه محدوده محصولات این صفحه
     const startIndex = (page - 1) * productsPerPage;
     const endIndex = startIndex + productsPerPage;
     const pageProducts = products.slice(startIndex, endIndex);
     
-    // پاک کردن container
     productsContainer.innerHTML = '';
     
-    // اگر محصولی وجود ندارد
     if (products.length === 0) {
         productsContainer.innerHTML = `
             <div class="no-products">
@@ -429,17 +419,14 @@ function displayProducts(page = 1) {
         productsContainer.appendChild(productCard);
     });
     
-    // ایجاد صفحه‌بندی
     createPagination(page);
     
-    // وصل کردن رویدادها (بعد از اینکه المنت‌ها ایجاد شدند)
     //setTimeout means: Run this code after a certain time
     setTimeout(() => {
         setupProductEvents();
     }, 0);
 }
 
-// ایجاد صفحه‌بندی
 function createPagination(currentPage = 1) {
     const totalPages = Math.ceil(products.length / productsPerPage);
     const paginationContainer = document.getElementById('pagination');
@@ -451,14 +438,12 @@ function createPagination(currentPage = 1) {
     
     let paginationHTML = '';
     
-    // دکمه صفحه قبل
     if (currentPage > 1) {
         paginationHTML += `<button class="page-prev" data-page="${currentPage - 1}">
             <i class="fas fa-arrow-right"></i> قبلی
         </button>`;
     }
     
-    // صفحات
     const startPage = Math.max(1, currentPage - 2);
     const endPage = Math.min(totalPages, currentPage + 2);
     
@@ -466,19 +451,16 @@ function createPagination(currentPage = 1) {
         paginationHTML += `<button class="page-number ${i === currentPage ? 'active' : ''}" data-page="${i}">${i}</button>`;
     }
     
-    // دکمه صفحه بعد
     if (currentPage < totalPages) {
         paginationHTML += `<button class="page-next" data-page="${currentPage + 1}">
             بعدی <i class="fas fa-arrow-left"></i>
         </button>`;
     }
     
-    // نمایش اطلاعات صفحه
     paginationHTML += `<span class="page-info">صفحه ${currentPage} از ${totalPages}</span>`;
     
     paginationContainer.innerHTML = paginationHTML;
     
-    // رویدادهای صفحه‌بندی
     paginationContainer.querySelectorAll('button').forEach(btn => {
         btn.addEventListener('click', function() {
             const page = parseInt(this.dataset.page);
@@ -486,7 +468,6 @@ function createPagination(currentPage = 1) {
                 currentPage = page;
                 displayProducts(currentPage);
                 
-                // اسکرول به بالای بخش محصولات
                 document.getElementById('products').scrollIntoView({
                     behavior: 'smooth',
                     block: 'start'
@@ -496,22 +477,18 @@ function createPagination(currentPage = 1) {
     });
 }
 
-// راه‌اندازی رویدادهای محصولات
 function setupProductEvents() {
     let eventsInitialized = false;
 
 function setupProductEvents() {
-    // اگر قبلاً وصل شده، دوباره وصل نکن
     if (eventsInitialized) return;
     eventsInitialized = true;
     
-    // دکمه‌های افزودن به سبد خرید
     document.addEventListener('click', function(e) {
         if (e.target.closest('.add-to-cart')) {
             const button = e.target.closest('.add-to-cart');
             const productId = parseInt(button.getAttribute('data-id'));
             
-            // پیدا کردن محصول از آرایه اصلی
             const product = products.find(p => p.id === productId);
             if (product) {
                 shoppingCart.addItem(product);
@@ -519,7 +496,6 @@ function setupProductEvents() {
             }
         }
         
-        // دکمه‌های مشاهده سریع
         if (e.target.closest('.quick-view-btn')) {
             const button = e.target.closest('.quick-view-btn');
             const productId = parseInt(button.getAttribute('data-id'));
@@ -527,7 +503,6 @@ function setupProductEvents() {
         }
     });
     
-    // جستجو (با debounce)
     let searchTimeout;
     const searchInput = document.getElementById('product-search');
     if (searchInput) {
@@ -541,7 +516,6 @@ function setupProductEvents() {
         });
     }
     
-    // فیلتر دسته‌بندی
     document.querySelectorAll('.filter-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -555,7 +529,6 @@ function setupProductEvents() {
         });
     });
     
-    // مرتب‌سازی
     const sortSelect = document.getElementById('product-sort');
     if (sortSelect) {
         sortSelect.addEventListener('change', function() {
@@ -564,13 +537,11 @@ function setupProductEvents() {
     }
 }
 
-// تابع جایگزین برای setupProductEvents که فقط یکبار استفاده بشه
 function setupProductEventsOnce() {
     eventsInitialized = false;
     setupProductEvents();
 }
 
-// تابع sortProducts رو هم اصلاح کن:
 function sortProducts(sortBy) {
     let sortedProducts = [...products];
     
@@ -604,11 +575,9 @@ function sortProducts(sortBy) {
             break;
     }
     
-    // نمایش محصولات مرتب‌شده با صفحه‌بندی
     displayFilteredProducts(sortedProducts);
 }
     
-    // دکمه‌های افزودن به سبد خرید
     document.querySelectorAll('.add-to-cart').forEach(button => {
         button.addEventListener('click', function() {
             const productId = parseInt(this.getAttribute('data-id'));
@@ -628,7 +597,6 @@ function sortProducts(sortBy) {
         });
     });
     
-    // جستجو
     const searchInput = document.getElementById('product-search');
     if (searchInput) {
         searchInput.addEventListener('input', function() {
@@ -637,7 +605,6 @@ function sortProducts(sortBy) {
         });
     }
     
-    // فیلتر دسته‌بندی
     document.querySelectorAll('.filter-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -657,18 +624,15 @@ function sortProducts(sortBy) {
     }
 }
 
-// فیلتر و جستجوی ترکیبی
 function filterAndSearch(searchTerm = '', categoryFilter = 'all') {
     let filteredProducts = [...products];
     
-    // فیلتر دسته‌بندی
     if (categoryFilter !== 'all') {
         filteredProducts = filteredProducts.filter(product => 
             product.category === categoryFilter
         );
     }
     
-    // جستجو
     if (searchTerm) {
         filteredProducts = filteredProducts.filter(product => 
             product.name.toLowerCase().includes(searchTerm) ||
@@ -677,11 +641,9 @@ function filterAndSearch(searchTerm = '', categoryFilter = 'all') {
         );
     }
     
-    // به‌روزرسانی نمایش
     displayFilteredProducts(filteredProducts);
 }
 
-// به‌روزرسانی محصولات فیلتر شده
 function updateFilteredProducts(filteredProducts) {
     const productsContainer = document.getElementById('products-container');
     if (!productsContainer) return;
@@ -698,7 +660,6 @@ function updateFilteredProducts(filteredProducts) {
         return;
     }
     
-    // نمایش 6 محصول اول
     const pageProducts = filteredProducts.slice(0, 6);
     
     productsContainer.innerHTML = '';
@@ -749,14 +710,11 @@ function updateFilteredProducts(filteredProducts) {
         productsContainer.appendChild(productCard);
     });
     
-    // صفحه‌بندی رو مخفی کن
     document.getElementById('pagination').innerHTML = '';
     
-    // وصل کردن رویدادها
     setTimeout(setupProductEvents, 0);
 }
 
-// مرتب‌سازی محصولات
 function sortProducts(sortBy) {
     let sortedProducts = [...products];
     
@@ -790,7 +748,6 @@ function sortProducts(sortBy) {
             break;
     }
     
-    // نمایش محصولات مرتب‌شده
     updateFilteredProducts(sortedProducts);
 }
 
@@ -805,26 +762,21 @@ function setupPromoPopup() {
     
     if (!popup) return;
     
-    // چک کن قبلاً کاربر Pop-up رو نبینده
     const hasSeenPopup = localStorage.getItem('hasSeenPromoPopup');
     const dontShowAgain = localStorage.getItem('dontShowPromoPopup');
     
-    // اگر قبلاً دیده یا انتخاب کرده نبیند، نمایش نده
     if (dontShowAgain === 'true') {
         return;
     }
     
-    // نمایش Pop-up بعد از 2 ثانیه
     setTimeout(() => {
         //classList.add() means: add class
         popup.classList.add('show');
         document.body.style.overflow = 'hidden'; // جلوگیری از اسکرول
         
-        // ذخیره اینکه کاربر Pop-up رو دیده
         localStorage.setItem('hasSeenPromoPopup', 'true');
     }, 2000);
     
-    // بستن Pop-up
     function closePopup() {
         popup.classList.remove('show');
         document.body.style.overflow = ''; // بازگشت اسکرول
@@ -835,35 +787,28 @@ function setupPromoPopup() {
             localStorage.setItem('hasSeenPromoPopup', 'true');
         }
         
-        // انیمیشن بسته شدن
         setTimeout(() => {
             popup.style.display = 'none';
         }, 400);
     }
     
-    // رویدادهای کلیک
     closeBtn?.addEventListener('click', closePopup);
     
     noBtn?.addEventListener('click', closePopup);
     
     yesBtn?.addEventListener('click', function() {
-        // بستن Pop-up
         closePopup();
         
-        // نمایش پیام موفقیت
         showNotification('🎉 کد تخفیف ۲۰٪ برای شما فعال شد! کد: NOWRUZ1405', 'success');
         
-        // رفتن به بخش محصولات
         setTimeout(() => {
             document.getElementById('products')?.scrollIntoView({
                 behavior: 'smooth'
             });
         }, 500);
         
-        // ذخیره در localStorage
         localStorage.setItem('promoCodeUsed', 'NOWRUZ1405');
         
-        // اگر چک‌باکس انتخاب شده
         if (dontShowCheckbox.checked) {
             localStorage.setItem('dontShowPromoPopup', 'true');
         }
@@ -876,7 +821,6 @@ function setupPromoPopup() {
         }
     });
     
-    // بستن با کلید ESC
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape' && popup.classList.contains('show')) {
             closePopup();
@@ -884,7 +828,6 @@ function setupPromoPopup() {
     });
 }
 
-// مشاهده سریع محصول
 function showQuickView(productId) {
     const product = products.find(p => p.id === productId);
     if (!product) return;
@@ -1063,7 +1006,6 @@ function showQuickView(productId) {
     
     document.body.appendChild(modal);
     
-    // بستن مودال
     modal.querySelector('.close-modal').addEventListener('click', () => {
         modal.style.opacity = '0';
         setTimeout(() => modal.remove(), 300);
@@ -1076,7 +1018,6 @@ function showQuickView(productId) {
         }
     });
     
-    // افزودن به سبد خرید از طریق مودال
     modal.querySelector('.add-to-cart-quick').addEventListener('click', () => {
         shoppingCart.addItem(product);
         showNotification('محصول به سبد خرید اضافه شد!', 'success');
@@ -1084,7 +1025,6 @@ function showQuickView(productId) {
         setTimeout(() => modal.remove(), 300);
     });
     
-    // خرید مستقیم
     modal.querySelector('.buy-now').addEventListener('click', () => {
         shoppingCart.addItem(product);
         showNotification('در حال انتقال به صفحه پرداخت...', 'info');
@@ -1095,13 +1035,11 @@ function showQuickView(productId) {
         }, 500);
     });
     
-    // انیمیشن ظاهر شدن
     setTimeout(() => {
         modal.querySelector('.quick-view-content').style.transform = 'translateY(0)';
     }, 50);
 }
 
-// تبدیل نام رنگ به کد HEX
 function getColorCode(colorName) {
     const colorMap = {
         'قرمز': '#e74c3c',
@@ -1118,7 +1056,6 @@ function getColorCode(colorName) {
     return colorMap[colorName] || '#3498db';
 }
 
-// شمارش معکوس
 function updateCountdown() {
     const now = new Date().getTime();
     const distance = countdownDate - now;
@@ -1144,16 +1081,31 @@ function updateCountdown() {
     if (minutesEl) minutesEl.textContent = minutes.toString().padStart(2, '۰');
     if (secondsEl) secondsEl.textContent = seconds.toString().padStart(2, '۰');
     
-    // انیمیشن تغییر ثانیه
-    if (secondsEl) {
-        secondsEl.style.transform = 'scale(1.2)';
+    function animate(el) {
+        el.style.transform = 'scale(1.2)';
         setTimeout(() => {
-            secondsEl.style.transform = 'scale(1)';
+            el.style.transform = 'scale(1)';
         }, 100);
+    }
+    
+    if (daysEl) {
+        daysEl.textContent = days.toString().padStart(2, '0');
+        animate(daysEl);
+    }
+    if (hoursEl) {
+        hoursEl.textContent = hours.toString().padStart(2, '0');
+        animate(hoursEl);
+    }
+    if (minutesEl) {
+        minutesEl.textContent = minutes.toString().padStart(2, '0');
+        animate(minutesEl);
+    }
+    if (secondsEl) {
+        secondsEl.textContent = seconds.toString().padStart(2, '0');
+        animate(secondsEl);
     }
 }
 
-// نمایش اعلان
 function showNotification(message, type = 'success') {
     //create a new <div> for the announcement
     const notification = document.createElement('div');
@@ -1179,7 +1131,6 @@ function showNotification(message, type = 'success') {
             <i class="fas fa-times"></i>
         </button>
     `;
-    //Appearance styles
     notification.style.cssText = `
         position: fixed;
         top: 100px;
@@ -1203,24 +1154,20 @@ function showNotification(message, type = 'success') {
     document.body.appendChild(notification);
     //add the notification to the bottom of the banner
     
-    // نمایش اعلان
     setTimeout(() => {
         notification.style.transform = 'translateX(0)';
     }, 10);
     
-    // close notification button
     notification.querySelector('.notification-close').addEventListener('click', () => {
         notification.style.transform = 'translateX(-100%)';
         setTimeout(() => notification.remove(), 300);
     });
     
-    // حذف خودکار بعد از 4 ثانیه
     const autoRemove = setTimeout(() => {
         notification.style.transform = 'translateX(-100%)';
         setTimeout(() => notification.remove(), 300);
     }, 4000);
     
-    // توقف حذف خودکار هنگام هاور
     notification.addEventListener('mouseenter', () => {
         clearTimeout(autoRemove);
     });
@@ -1233,7 +1180,6 @@ function showNotification(message, type = 'success') {
     });
 }
 
-// رنگ اعلان بر اساس نوع
 function getNotificationColor(type) {
     const colors = {
         success: 'var(--primary-gradient)',
@@ -1255,7 +1201,6 @@ function getNotificationBackground(type) {
     }
 }
     
-// سوالات متداول
 document.addEventListener('DOMContentLoaded', function () {
     const questions = document.querySelectorAll('.faq-question');
 
@@ -1263,7 +1208,6 @@ document.addEventListener('DOMContentLoaded', function () {
         question.addEventListener('click', function () {
             const answer = question.nextElementSibling;
 
-            //بستن سوالات دیگر
             questions.forEach(q => {
                 if (q !== question) {
                     q.classList.remove('active');
@@ -1271,7 +1215,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
 
-            //باز/بستن سوال فعلی 
             question.classList.toggle('active');
             answer.classList.toggle('open');
         });
@@ -1288,10 +1231,7 @@ function setupFaq() {
     });
 }
 
-/**
- * Newsletter Module - Professional Version
- * با قابلیت‌های کامل اعتبارسنجی، مدیریت خطا و UX پیشرفته
- */
+
 
 function setupNewsletterForm() {
     const form = document .getElementById('newsletter-form');
@@ -1306,7 +1246,6 @@ function setupNewsletterForm() {
         const name = nameInput.value.trim();
         const email = emailInput.value.trim();
 
-        //اعتبارسنجی
         if (!name) {
             showNotification('لطفا نام خود را وارد کنید', 'error');
             nameInput.focus();
@@ -1319,7 +1258,6 @@ function setupNewsletterForm() {
             return;
         }
 
-        // شبیه‌سازی ارسال به سرور
         const submitBtn = this.querySelector('.btn');
         const originalText = submitBtn.innerHTML;
         submitBtn.innerHTML = '<i class="fas fa-spinner fa-spainner"></i>در حال ارسال...';
@@ -1328,24 +1266,20 @@ function setupNewsletterForm() {
         setTimeout(() => {
             showNotification(`ممنون ${name}! کد تخفیف ۲۰٪ به ایمیل ${email} ارسال شد`, 'success');
 
-            // بازنشانی فرم
             this.reset();
             submitBtn.innerHTML = originalText;
             submitBtn.disabled = false;
 
-            //ذخیره در localStorage
             saveSubscription(email, name);
         }, 1500);
     });
 }
 
-//اعتبارسنجی ایمیل
 function isValidEmail(email) {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(email);
 }
 
-// ذخیره اشتراک
 function saveSubscription(email, name) {
     const subscriptions = JSON.parse(localStorage.getItem('newsletterSubscriptions') || '[]');
     const existingIndex = subscriptions.findIndex(sub => sub.email === email);
@@ -1374,20 +1308,16 @@ class NewsletterManager {
     init() {
         if (!this.form) return;
         
-        // تنظیم event listeners
         this.setupEventListeners();
         
-        // تنظیم اعتبارسنجی real-time
         this.setupRealTimeValidation();
         
-        // نمایش آخرین اشتراک (در صورت وجود)
         this.displayLastSubscription();
     }
     
     setupEventListeners() {
         this.form.addEventListener('submit', this.handleSubmit.bind(this));
         
-        // دکمه ثبت‌نام جدید
         const newSubBtn = document.getElementById('new-subscription');
         if (newSubBtn) {
             newSubBtn.addEventListener('click', this.resetForm.bind(this));
@@ -1422,40 +1352,30 @@ class NewsletterManager {
     async handleSubmit(e) {
         e.preventDefault();
         
-        // اعتبارسنجی کامل
         if (!this.validateForm()) {
             this.shakeForm();
             return;
         }
         
-        // جمع‌آوری داده‌ها
         const formData = this.collectFormData();
         
-        // نمایش حالت loading
         this.setLoadingState(true);
         
         try {
-            // شبیه‌سازی درخواست به سرور
             await this.submitToServer(formData);
             
-            // نمایش موفقیت
             this.showSuccessState(formData);
             
-            // ذخیره در localStorage
             this.saveSubscription(formData);
             
-            // ریست فرم
             this.form.reset();
             
-            // ارسال رویداد برای analytics
             this.dispatchSubscriptionEvent(formData);
             
         } catch (error) {
-            // نمایش خطا
             this.showError('خطا در ارسال اطلاعات. لطفا دوباره تلاش کنید.');
             console.error('Newsletter submission error:', error);
         } finally {
-            // خاتمه loading
             this.setLoadingState(false);
         }
     }
@@ -1516,7 +1436,6 @@ class NewsletterManager {
                 break;
         }
         
-        // به‌روزرسانی وضعیت فیلد
         this.updateFieldState(input, isValid, errorMessage, errorElement);
         
         return isValid;
@@ -1563,15 +1482,12 @@ class NewsletterManager {
     }
     
     async submitToServer(formData) {
-        // شبیه‌سازی تاخیر شبکه
         await new Promise(resolve => setTimeout(resolve, 1500));
         
-        // شبیه‌سازی خطای تصادفی (۵٪ احتمال)
         if (Math.random() < 0.05) {
             throw new Error('Network error simulation');
         }
         
-        // تولید کد تخفیف
         const discountCode = this.generateDiscountCode(formData.name);
         
         return {
@@ -1595,24 +1511,18 @@ class NewsletterManager {
         const successMessage = document.getElementById('success-message');
         const discountElement = document.getElementById('discount-code');
         
-        // به‌روزرسانی متن موفقیت
         successMessage.textContent = 
            ` ممنون ${formData.name}! کد تخفیف ۱۰٪ برای شما فعال شد.`;
         
-        // نمایش کد تخفیف
         discountElement.textContent = discountCode;
         
-        // کپی خودکار کد تخفیف
         this.copyToClipboard(discountCode);
         
-        // نمایش حالت موفقیت
         this.form.style.display = 'none';
         this.successState.style.display = 'block';
         
-        // انیمیشن
         this.successState.style.animation = 'fadeIn 0.5s ease-out';
         
-        // تمرکز روی دکمه جدید
         setTimeout(() => {
             document.getElementById('new-subscription').focus();
         }, 100);
@@ -1621,7 +1531,6 @@ class NewsletterManager {
     async copyToClipboard(text) {
         try {
             await navigator.clipboard.writeText(text);
-            // می‌توانید یک نوتیفیکیشن برای کاربر نمایش دهید
         } catch (err) {
             console.log('Could not copy text: ', err);
         }
@@ -1633,7 +1542,6 @@ class NewsletterManager {
                 localStorage.getItem('newsletterSubscriptions') || '[]'
             );
             
-            // بررسی تکراری نبودن
             const exists = subscriptions.some(sub => sub.email === formData.email);
             
             if (!exists) {
@@ -1644,7 +1552,6 @@ class NewsletterManager {
                     status: 'active'
                 });
                 
-                // محدود کردن به ۵۰ مورد آخر
                 const trimmedSubscriptions = subscriptions.slice(0, 50);
                 
                 localStorage.setItem(
@@ -1680,7 +1587,6 @@ class NewsletterManager {
         );
         
         if (subscriptions.length > 0) {
-            // می‌توانید آخرین اشتراک را در جایی نمایش دهید
             console.log('Last subscription:', subscriptions[0]);
         }
     }
@@ -1706,7 +1612,6 @@ class NewsletterManager {
     }
     
     showError(message) {
-        // نمایش خطا در بالای فرم
         const errorContainer = document.createElement('div');
         errorContainer.className = 'global-error';
         errorContainer.innerHTML = `
@@ -1714,7 +1619,6 @@ class NewsletterManager {
             <span>${message}</span>
         `;
         
-        // استایل خطا
         errorContainer.style.cssText = `
             background: rgba(255, 107, 107, 0.15);
             border-right: 3px solid #ff6b6b;
@@ -1728,10 +1632,8 @@ class NewsletterManager {
             animation: fadeIn 0.3s ease-out;
         `;
         
-        // اضافه کردن به فرم
         this.form.prepend(errorContainer);
         
-        // حذف خودکار پس از ۵ ثانیه
         setTimeout(() => {
             if (errorContainer.parentNode) {
                 errorContainer.style.animation = 'fadeOut 0.3s ease-out';
@@ -1748,29 +1650,23 @@ class NewsletterManager {
     }
     
     resetForm() {
-        // مخفی کردن حالت موفقیت
         this.successState.style.display = 'none';
         
-        // نمایش مجدد فرم
         this.form.style.display = 'flex';
         this.form.reset();
         
-        // پاک کردن خطاها
         const errors = this.form.querySelectorAll('.validation-message');
         errors.forEach(error => {
             error.textContent = '';
             error.style.display = 'none';
         });
         
-        // تمرکز روی اولین فیلد
         this.form.querySelector('#newsletter-name').focus();
         
-        // انیمیشن
         this.form.style.animation = 'fadeIn 0.5s ease-out';
     }
     
     dispatchSubscriptionEvent(formData) {
-        // ارسال رویداد برای Google Analytics یا سایر سیستم‌ها
         const event = new CustomEvent('newsletterSubscription', {
             detail: { ...formData, timestamp: Date.now() }
         });
@@ -1778,11 +1674,9 @@ class NewsletterManager {
     }
 }
 
-// مقداردهی اولیه
 document.addEventListener('DOMContentLoaded', () => {
     new NewsletterManager();
     
-    // اضافه کردن استایل‌های انیمیشن
     const style = document.createElement('style');
     style.textContent = `
         @keyframes shake {
@@ -1824,7 +1718,6 @@ function setupBackToTop() {
             behavior: 'smooth'
         });
         
-        // انیمیشن کلیک
         backToTopButton.style.transform = 'scale(0.9)';
         setTimeout(() => {
             backToTopButton.style.transform = '';
@@ -1832,7 +1725,6 @@ function setupBackToTop() {
     });
 }
 
-// انیمیشن اسکرول برای لینک‌ها
 function setupSmoothScroll() {
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
@@ -1852,13 +1744,10 @@ function setupSmoothScroll() {
 }
 
 
-//تابع برای نمایش و مدیریت سبد خرید
 function setupCartModal() {
-    // دکمه سبد خرید در هدر
     const cartIcon = document.querySelector('.cart-icon');
     if (!cartIcon) return;
     
-    // ساخت مودال سبد خرید
     const cartModal = document.createElement('div');
     cartModal.id = 'cartModal';
     cartModal.style.cssText = `
@@ -1986,7 +1875,6 @@ function setupCartModal() {
     
     document.body.appendChild(cartModal);
     
-    // رویدادهای مودال
     cartIcon.addEventListener('click', function(e) {
         e.stopPropagation();
         cartModal.style.display = 'flex';
@@ -2007,7 +1895,6 @@ function setupCartModal() {
         }
     });
     
-    // دکمه پرداخت
     document.getElementById('checkoutBtn').addEventListener('click', function() {
         if (shoppingCart.items.length === 0) {
             showNotification('سبد خرید شما خالی است', 'error');
@@ -2021,7 +1908,6 @@ function setupCartModal() {
     });
 }
 
-// به‌روزرسانی مودال سبد خرید
 function updateCartModal() {
     const cartItemsContainer = document.getElementById('cartItemsContainer');
     const emptyCartMessage = document.getElementById('emptyCartMessage');
@@ -2042,7 +1928,7 @@ function updateCartModal() {
     let cartHTML = '';
     
     shoppingCart.items.forEach(item => {
-        const itemTotal = parseInt(item.newPrice.replace(/,/g, '')) * item.quantity;
+        const itemTotal = parsePrice(item.newPrice) * item.quantity;
         
         cartHTML += `
             <div class="cart-item" style="
@@ -2134,7 +2020,6 @@ function updateCartModal() {
     cartTotalCount.textContent = shoppingCart.count;
     cartTotalPrice.textContent = shoppingCart.total.toLocaleString('fa-IR') + ' تومان';
     
-    // وصل کردن رویدادهای دکمه‌ها
     document.querySelectorAll('.decrease-quantity').forEach(btn => {
         btn.addEventListener('click', function() {
             const productId = parseInt(this.getAttribute('data-id'));
@@ -2175,20 +2060,16 @@ function updateCartModal() {
     });
 }
 
-//نمایش محصولات فیلتر شده با صفحه بندی
 function displayFilteredProducts(filteredProducts) {
     const productsContainer = document.getElementById('products-container');
     const paginationContainer = document.getElementById('pagination');
     
     if (!productsContainer) return;
     
-    // بازنشانی صفحه به ۱
     currentPage = 1;
     
-    // ذخیره محصولات فیلتر شده در یک متغیر سراسری
     window.filteredProducts = filteredProducts;
     
-    // اگر محصولی برای نمایش نیست
     if (filteredProducts.length === 0) {
         productsContainer.innerHTML = `
             <div class="no-products" style="grid-column: 1 / -1; text-align: center; padding: 50px;">
@@ -2201,24 +2082,19 @@ function displayFilteredProducts(filteredProducts) {
         return;
     }
     
-    // نمایش محصولات صفحه اول
     displayProductsPage(filteredProducts, 1);
 }
 
-// تابع جدید برای نمایش صفحه خاص
 function displayProductsPage(productsArray, page = 1) {
     const productsContainer = document.getElementById('products-container');
     if (!productsContainer) return;
     
-    // محاسبه محصولات این صفحه
     const startIndex = (page - 1) * productsPerPage;
     const endIndex = startIndex + productsPerPage;
     const pageProducts = productsArray.slice(startIndex, endIndex);
     
-    // پاک کردن محتوای قبلی
     productsContainer.innerHTML = '';
     
-    // نمایش محصولات این صفحه
     pageProducts.forEach(product => {
         const productCard = document.createElement('div');
         productCard.className = 'product-card';
@@ -2264,14 +2140,11 @@ function displayProductsPage(productsArray, page = 1) {
         productsContainer.appendChild(productCard);
     });
     
-    // ایجاد صفحه‌بندی برای محصولات فیلتر شده
     createFilteredPagination(productsArray, page);
     
-    // وصل کردن رویدادها (با جلوگیری از دوباره کاری)
     setupProductEventsOnce();
 }
 
-// تابع جدید برای صفحه‌بندی محصولات فیلتر شده
 function createFilteredPagination(productsArray, currentPage = 1) {
     const totalPages = Math.ceil(productsArray.length / productsPerPage);
     const paginationContainer = document.getElementById('pagination');
@@ -2283,14 +2156,12 @@ function createFilteredPagination(productsArray, currentPage = 1) {
     
     let paginationHTML = '';
     
-    // دکمه صفحه قبل
     if (currentPage > 1) {
         paginationHTML += `<button class="page-prev" data-page="${currentPage - 1}">
             <i class="fas fa-arrow-right"></i> قبلی
         </button>`;
     }
     
-    // صفحات
     const startPage = Math.max(1, currentPage - 2);
     const endPage = Math.min(totalPages, currentPage + 2);
     
@@ -2298,27 +2169,22 @@ function createFilteredPagination(productsArray, currentPage = 1) {
         paginationHTML += `<button class="page-number ${i === currentPage ? 'active' : ''}" data-page="${i}">${i}</button>`;
     }
     
-    // دکمه صفحه بعد
     if (currentPage < totalPages) {
         paginationHTML += `<button class="page-next" data-page="${currentPage + 1}">
             بعدی <i class="fas fa-arrow-left"></i>
         </button>`;
     }
     
-    // نمایش اطلاعات صفحه
     paginationHTML += `<span class="page-info">صفحه ${currentPage} از ${totalPages}</span>`;
     
     paginationContainer.innerHTML = paginationHTML;
     
-    // رویدادهای صفحه‌بندی جدید
     paginationContainer.querySelectorAll('button').forEach(btn => {
         btn.addEventListener('click', function() {
             const page = parseInt(this.dataset.page);
             if (page !== currentPage) {
-                // استفاده از محصولات فیلتر شده ذخیره شده
                 displayProductsPage(window.filteredProducts || products, page);
                 
-                // اسکرول به بالای بخش محصولات
                 document.getElementById('products').scrollIntoView({
                     behavior: 'smooth',
                     block: 'start'
@@ -2329,15 +2195,11 @@ function createFilteredPagination(productsArray, currentPage = 1) {
 }
 
 
-// مقداردهی اولیه
 function init() {
-    // بارگذاری سبد خرید از localStorage
     shoppingCart.loadFromLocalStorage();
     
-    // Pop-up تبلیغاتی
     setupPromoPopup();
     
-    // نمایش محصولات (حالا با صفحه‌بندی)
     displayProducts();
 
     // راه‌اندازی منوی همبرگری
@@ -2350,16 +2212,12 @@ function init() {
     // راه‌اندازی faq
     setupFaq();
     
-    // راه‌اندازی دکمه بازگشت به بالا
     setupBackToTop();
     
-    // راه‌اندازی اسکرول نرم
     setupSmoothScroll();
 
-    //نمایش و مدیریت سبد خرید
     setupCartModal();
 
-    // نمایش پیام خوش‌آمدگویی
     setTimeout(() => {
         if (!localStorage.getItem('welcomeShown')) {
             showNotification('به فروشگاه ما خوش آمدید! از حراجی‌های ویژه ما دیدن کنید.', 'info');
@@ -2368,10 +2226,8 @@ function init() {
     }, 1000);
 }
 
-// بارگذاری اولیه یا شروع برنامه
 document.addEventListener('DOMContentLoaded', init);
 
-// پشتیبانی از تغییر در مرورگر
 window.addEventListener('beforeunload', () => {
     shoppingCart.saveToLocalStorage();
 });
