@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>فروشگاه پوشاک | تخفیف ۵۰% نوروزی</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800&display=swap" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!--header-->
+    <header class="header">
+        <nav class="navbar">
+            <div class="logo">
+                <i class="fas fa-crown crown-icon"></i>
+                <h1>فروشگاه پوشاک مد</h1>
+            </div>
+                <ul class="nav-links">
+                    <li><a href="#home">خانه</a></li>
+                    <li><a href="#features">درباره ما</a></li>
+                    <li><a href="#products">محصولات</a></li>
+                    <li><a href="#nowruz-offer">تخفیف ویژه</a></li>
+                    <li><a href="#faq">سوالات</a></li>
+                    <li><a href="#contact">تماس با ما</a></li>
+                </ul>
+
+                <div class="header-icons">
+                    <div class="cart-icon-wrapper">
+                        <div class="cart-icon">
+                            <i class="fas fa-shopping-bag"></i>
+                            <span class="cart-count">0</span>
+                        </div>
+                    </div>
+
+                    <button class="hamburger-btn" id="hamburgerBtn" aria-label="mobile menu">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </div>
+                
+                <!--mobile menu-->
+                <div class="mobile-menu" id="mobileMenu">
+                    <div class="mobile-menu-header">
+                        <div class="mobile-logo">
+                            <i class="fas fa-crown"></i>
+                            <h3>فروشگاه پوشاک مد</h3>
+                        </div>
+                        <button class="mobile-close-btn" id="mobileCloseBtn">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+
+                    <ul class="mobile-nav-links">
+                        <li><a href="#home"><i class="fas fa-home"></i>خانه</a></li>
+                        <li><a href="#features"><i class="fas fa-info-circle"></i>درباره ما</a></li>
+                        <li><a href="#products"><i class="fas fa-tshirt"></i>محصولات</a></li>
+                        <li><a href="#nowruz-offer"><i class="fas fa-gift"></i>تخفیف ویژه</a></li>
+                        <li><a href="#faq"><i class="fas fa-question-circle"></i> سوالات </a></li>
+                        <li><a href="#contact"><i class="fas fa-phone"></i>تماس با ما</a></li>
+                    </ul>
+
+                    <div class="mobile-cart-info">
+                        <div class="mobile-cart">
+                            <i class="fas fa-shopping-bag"></i>
+                            <span>سبدخرید</span>
+                            <span class="mobile-cart-count">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mobile-overlay" id="mobileOverlay"></div>
+        </nav>
+    </header>
+
+    <!--hero-->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h2 class="nowruz-title">
+                    <span class="nowruz-text">نوروز ۱۴۰۵ مبارک</span>
+                    <i class="fas fa-seedling"></i>
+                </h2>
+                <h1 class="hero-title">تخفیف <span class="discount">۵۰٪</span> ویژه نوروز</h1>
+                <p class="hero-subtitle">خانه‌تکانی کمد لباس! استایل نوروزی تان با بهترین قیمت سال  </p>
+
+                <!--countdown-->
+                <div class="countdown-container">
+                    <p class="countdown-title">زمان باقی‌مانده تا پایان حراج</p>
+                    <div class="countdown">
+                        <div class="countdown-item">
+                            <span id="days">۰۵</span>
+                            <p>روز</p>
+                        </div>
+                        <div class="countdown-item">
+                            <span id="hours">۱۲</span>
+                            <p>ساعت</p>
+                        </div>
+                        <div class="countdown-item">
+                            <span id="minutes">۳۰</span>
+                            <p>دقیقه</p>
+                        </div>
+                        <div class="countdown-item">
+                            <span id="seconds">۴۵</span>
+                            <p>ثانیه</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cta-buttons">
+                    <a href="#products" class="btn btn-primary">
+                        مشاهده محصولات شگفت‌انگیز
+                        <i class="fas sa-arrow-left"></i>
+                    </a>
+                    <a href="#offer" class="btn btn-secondary">
+                        اطلاعات بیشتر 
+                    </a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="image-frame">
+                    <img src="https://images.unsplash.com/photo-1445205170230-053b83016050?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="مدل لباس نوروزی">
+                    <div class="badge">۵۰٪ تخفیف</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- features -->
+    <section class="features" id="features">
+        <div class="section-title">
+            <h2>ویژگی‌های منحصر به فرد</h2>
+            <p>چرا مشتریان ما را انتخاب می‌کنند</p>
+        </div>
+    
+        <div class="features-container">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-shipping-fast"></i>
+                </div>
+                <h3>ارسال رایگان</h3>
+                <p>ارسال رایگان برای خریدهای بالای ۷۰۰ هزار تومان به سراسر کشور</p>
+            </div>
+        
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h3>ضمانت بازگشت</h3>
+                <p>۷ روز ضمانت بازگشت وجه در صورت عدم رضایت از محصول</p>
+            </div>
+        
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-headset"></i>
+                </div>
+                <h3>پشتیبانی ۲۴ ساعته</h3>
+                <p>پشتیبانی آنلاین و تلفنی در تمام ساعات شبانه روز</p>
+            </div>
+        
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-tags"></i>
+                </div>
+                <h3>تخفیف ویژه</h3>
+                <p>تخفیف‌های دائمی و ویژه برای اعضای باشگاه مشتریان</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- products -->
+    <section class="products" id="products">
+        <div class="section-title">
+            <h2>محصولات منتخب با تخفیف ویژه</h2>
+            <p>بهترین‌های فصل بهار با ۵۰٪ تخفیف</p>
+        </div>
+    
+        <!-- فیلتر و مرتب‌سازی -->
+        <div class="products-toolbar">
+            <div class="toolbar-container">
+                <!-- جستجو -->
+                <div class="search-box">
+                    <input type="text" id="product-search" placeholder="جستجوی محصولات">
+                    <i class="fas fa-search"></i>
+                </div>
+            
+                <!-- فیلتر دسته‌بندی -->
+                <div class="filter-buttons">
+                    <button class="filter-btn" data-filter="مجلسی">مجلسی</button>
+                    <button class="filter-btn" data-filter="زنانه">زنانه</button>
+                    <button class="filter-btn" data-filter="مردانه">مردانه</button>
+                </div>
+            
+                <!-- مرتب‌سازی -->
+                <div class="sort-dropdown">
+                    <select id="product-sort">
+                        <option value="default">جدیدترین</option>
+                        <option value="price-low">ارزان‌ترین</option>
+                        <option value="price-high">گران‌ترین</option>
+                        <option value="rating">پربازدیدترین</option>
+                        <option value="discount">بیشترین تخفیف</option>
+                    </select>
+                </div>
+            </div>
+         </div>
+    
+        <!-- لیست محصولات -->
+        <div class="products-container" id="products-container">
+        <!-- محصولات با جاوااسکریپت ساخته می‌شوند -->
+        </div>
+    
+        <!-- صفحه‌بندی -->
+        <div class="pagination" id="pagination">
+        <!-- با JS پر می‌شود -->
+        </div>
+    </section>
+
+
+    <!-- Newsletter Signup Section -->
+    <section class="newsletter" id="nowruz-offer">
+        <div class="newsletter-container">
+            <div class="newsletter-content">
+                <div class="nowruz-banner">
+                    <div class="nowruz-firework">
+                        <i class="fas fa-fire"></i>
+                        <i class="fas fa-fire"></i>
+                        <i class="fas fa-fire"></i>
+                    </div>
+                    <h2 class="newsletter-title">
+                        <span class="nowruz-text">🎊 تخفیف ویژه عید نوروز 🎊</span>
+                    </h2>
+                    <div class="nowruz-subtitle">
+                        <span class="discount-badge">۵۰٪</span>
+                        <span>تخفیف برای اولین خرید</span>
+                    </div>
+                </div>
+            
+                <p class="newsletter-description">
+                    <i class="fas fa-gift"></i> با عضویت در خبرنامه، <strong>کد تخفیف ۵۰٪</strong> هدیه نوروزی ما را دریافت کنید!
+                    <br>
+                    <i class="fas fa-leaf"></i> اولین خرید بهاری خود را با بهترین قیمت انجام دهید
+                </p>
+            
+                <!-- Newsletter Form -->
+                <form id="newsletter-form" class="newsletter-form" novalidate>
+                    <div class="form-group">
+                        <div class="input-with-icon">
+                            <i class="fas fa-user"></i>
+                            <input 
+                                type="text" 
+                                id="nowruz-name"
+                                name="name"
+                                placeholder="نام و نام خانوادگی"
+                                required
+                                autocomplete="name"
+                            >
+                        </div>
+                    </div>
+                
+                    <div class="form-group">
+                        <div class="input-with-icon">
+                            <i class="fas fa-envelope"></i>
+                            <input 
+                                type="email" 
+                                id="nowruz-email"
+                                name="email"
+                                placeholder="ایمیل خود را وارد کنید"
+                                required
+                                autocomplete="email"
+                            >
+                        </div>
+                    </div>
+                
+                    <div class="form-group">
+                        <div class="input-with-icon">
+                            <i class="fas fa-phone"></i>
+                            <input 
+                                type="tel" 
+                                id="nowruz-phone"
+                                name="phone"
+                                placeholder="شماره موبایل (اختیاری)"
+                                autocomplete="tel"
+                            >
+                        </div>
+                    </div>
+                
+                    <div class="form-group checkbox-group">
+                        <input type="checkbox" id="nowruz-offers" name="offers" checked>
+                        <label for="nowruz-offers">
+                            دریافت پیشنهادات ویژه نوروزی و تخفیف‌های فصلی
+                        </label>
+                    </div>
+                
+                    <button type="submit" class="btn-nowruz">
+                        <i class="fas fa-gift"></i>
+                        <span class="btn-text">دریافت کد تخفیف ۵۰٪</span>
+                        <div class="btn-sparkles">
+                            <i class="fas fa-sparkle"></i>
+                            <i class="fas fa-sparkle"></i>
+                            <i class="fas fa-sparkle"></i>
+                        </div>
+                    </button>
+                
+                    <p class="form-note">
+                        <i class="fas fa-shield-alt"></i>
+                         اطلاعات شما نزد ما محفوظ است. هر زمان می‌توانید عضویت را لغو کنید
+                    </p>
+                </form>
+            
+                <!-- Success Message -->
+                <div class="success-state" id="success-state" style="display: none;">
+                    <div class="success-icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <h3>تبریک! هدیه نوروزی شما فعال شد 🎁</h3>
+                    <p class="success-message" id="success-message"></p>
+                    <div class="discount-code" id="discount-code"></div>
+                    <p class="success-instruction">
+                        <i class="fas fa-info-circle"></i>
+                        کد بالا را در صفحه پرداخت وارد کنید
+                    </p>
+                    <button class="btn btn-continue" id="continue-shopping">
+                        <i class="fas fa-shopping-bag"></i>
+                        ادامه خرید
+                    </button>
+                </div>
+            </div>
+        
+            <!-- Side Image -->
+            <div class="newsletter-image">
+                <div class="nowruz-gift-box">
+                    <div class="gift-box">
+                        <div class="gift-lid"></div>
+                        <div class="gift-body">
+                            <div class="gift-ribbon"></div>
+                        </div>
+                    </div>
+                    <div class="floating-discount-badge">
+                        <span>۵۰٪</span>
+                        <small>تخفیف</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Decorative Elements -->
+        <div class="nowruz-decoration">
+            <div class="decoration-sprig sprig-1">🌿</div>
+            <div class="decoration-sprig sprig-2">🌿</div>
+            <div class="decoration-flower">🌺</div>
+        </div>
+    </section>
+
+    <!-- Frequently Asked Questions -->
+    <section class="faq" id="faq">
+        <div class="section-title">
+            <h2>سوالات متداول</h2>
+            <p>پاسخ به پرسش‌های پرتکرار شما</p>
+        </div>
+        <div class="faq-container">
+            <div class="faq-item">
+                <button class="faq-question">
+                    <span>زمان ارسال مرسولات قبل از عید چقدر است؟</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>تمامی سفارشات ثبت‌شده تا ۲۵ اسفند، حداکثر تا ۲۸ اسفند ارسال خواهند شد. سفارشات بعد از این تاریخ، پس از تعطیلات نوروز ارسال می‌شوند</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">
+                    <span>آیا کد تخفیف جداگانه نیاز است؟</span>
+                    <i class="fas fa-chevron-down"></i>
+
+                </button>
+                <div class="faq-answer">
+                    <p>خیر، تخفیف ۵۰٪ به صورت خودکار روی قیمت محصولات اعمال شده است و نیاز به کد تخفیف جداگانه نیست</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">
+                    <span>آیا این تخفیف روی محصولات حراجی قبلی هم اعمال می‌شود؟</span>
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <p>بله، این تخفیف روی تمام محصولات فروشگاه شامل محصولات حراجی قبلی نیز اعمال می‌شود</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- footer -->
+    <footer class="footer" id="contact">
+        <div class="footer-container">
+            <div class="footer-col">
+                <div class="logo footer-logo">
+                    <i class="fas fa-crown crown-icon"></i>
+                    <h2>فروشگاه پوشاک مد</h2>
+                </div>
+                <p class="footer-about">فروشگاه آنلاین پوشاک با کیفیت و قیمت مناسب، ارائه‌دهنده جدیدترین مدل‌های روز دنیا</p>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-telegram"></i></a>
+                    <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h3>لینک‌های مفید</h3>
+                <ul>
+                    <li><a href="#home">خانه</a></li>
+                    <li><a href="#products">محصولات</a></li>
+                    <li><a href="#about">درباره ما</a></li>
+                    <li><a href="#contact">تماس با ما</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>خدمات مشتریان</h3>
+                <ul>
+                    <li><a href="#">سوالات متداول</a></li>
+                    <li><a href="#">راهنمای اندازه‌گیری</a></li>
+                    <li><a href="#">قوانین بازگرداندن کالا</a></li>
+                    <li><a href="#">حریم خصوصی</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h3>تماس با ما</h3>
+                <ul class="contact-info">
+                    <li><i class="fas fa-phone"></i> ۰۲۱-۲۲۳۴۱۶۷۸</li>
+                    <li><i class="fas fa-envelope"></i> info@clothMode.com</li>
+                    <li><i class="fas fa-map-marker-alt"></i>۱۲ تهران، خیابان ولیعصر </li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© ۱۴۰۵ فروشگاه پوشاک مد. تمامی حقوق محفوظ است. طراحی شده با <i class="fas fa-heart"></i> برای نوروز </p>
+        </div>
+    </footer>
+
+    <!-- Pop-up تبلیغاتی -->
+    <div class="promo-popup" id="promoPopup">
+        <div class="popup-container">
+            <button class="popup-close" id="closePopup">×</button>
+        
+            <div class="popup-content">
+                <!-- آیکون یا عکس -->
+                <div class="popup-icon">
+                    <i class="fas fa-fire"></i>
+                </div>
+            
+                <!-- عنوان -->
+                <h2 class="popup-title">🔥 تخفیف‌های داغ امروز!</h2>
+            
+                <!-- متن -->
+                <p class="popup-text">
+                    می‌خوای زودتر از بقیه از تخفیف‌های ویژه با خبر بشی؟
+                    <br>
+                    <span class="popup-highlight">کد تخفیف ۲۰٪ هدیه بگیر!</span>
+                </p>
+            
+                <!-- دکمه‌ها -->
+                <div class="popup-buttons">
+                    <button class="popup-btn popup-yes" id="popupYes">
+                        <i class="fas fa-gift"></i>
+                        بله، حتما!
+                    </button>
+                    <button class="popup-btn popup-no" id="popupNo">
+                        <i class="fas fa-times"></i>
+                        فعلاً نه
+                    </button>
+                </div>
+            
+                <!-- چک‌باکس -->
+                <label class="popup-checkbox">
+                    <input type="checkbox" id="dontShowAgain">
+                    <span>دیگر این پیام را نشان نده</span>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Back to top button -->
+    <button id="backToTop" class="back-to-top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script src="script.js"></script>
+</body>
+</html>
