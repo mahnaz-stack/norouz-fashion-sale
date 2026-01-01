@@ -560,84 +560,6 @@ body {
     background-color: var(--primary-color);
 }
 
-/* responsive */
-
-/* 💻 تبلت */
-@media (min-width: 769px) and (max-width: 1024px) {
-    .navbar {
-        gap: 15px;
-    }
-    
-    .nav-links {
-        gap: 5px;
-    }
-    
-    .nav-links a {
-        padding: 8px 15px;
-        font-size: 0.9rem;
-        min-width: 85px;
-    }
-    
-    .logo h1 {
-        font-size: 1.4rem;
-    }
-}
-
-/* برای دسکتاپ */
-@media (min-width: 769px) {
-    .nav-links {
-        display: flex;
-    }
-    
-    .mobile-menu,
-    .mobile-overlay {
-        display: none !important;
-    }
-}
-
-/* برای موبایل */
-@media (max-width: 768px) {
-    .hamburger-btn {
-        display: flex;
-    }
-    
-    .nav-links {
-        display: none;
-    }
-    
-    .logo h1 {
-        font-size: 1.2rem;
-    }
-    
-    .cart-icon {
-        width: 40px;
-        height: 40px;
-        font-size: 1.1rem;
-    }
-    
-    .cart-count {
-        width: 20px;
-        height: 20px;
-        font-size: 0.8rem;
-    }
-}
-
-/*موبایل کوچک (عمودی) */
-@media (max-width: 480px) {
-    .logo h1 {
-        font-size: 1rem;
-    }
-    
-    .mobile-menu {
-        width: 90%;
-    }
-    
-    .mobile-nav-links a {
-        padding: 15px 20px;
-        font-size: 1rem;
-    }
-}
-
 /* هیرو */
 .hero {
     padding: 120px 25px 100px;
@@ -1351,29 +1273,6 @@ body {
     justify-content: space-between;
     position: relative;
     z-index: 1;
-}
-
-/* ریسپانسیو */
-@media (max-width: 768px) {
-    .product-image-wrapper {
-        height: 200px;
-    }
-    
-    .products-container {
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    }
-}
-
-@media (min-width: 769px) and (max-width: 1024px) {
-    .product-image-wrapper {
-        height: 220px;
-    }
-}
-
-@media (min-width: 1025px) {
-    .product-image-wrapper {
-        height: 250px;
-    }
 }
 
 /* جستجو */
@@ -3011,25 +2910,10 @@ body {
 
 
 /* هدر */
-@media (max-width: 992px) {
-    .nav-links {
-        gap: 5px !important;
-    }
-    
-    .nav-links a {
-        padding: 8px 12px !important;
-        font-size: 0.9rem !important;
-        min-width: 70px !important;
-    }
-    
-    .logo h1 {
-        font-size: 1.4rem !important;
-    }
-}
-
-@media (max-width: 768px) {
-    .header {
-        padding: 12px 16px;
+/*@بایل (تا 767px) */
+@media (max-width: 767px) {
+    .hamburger-btn {
+        display: flex;
     }
     
     .nav-links {
@@ -3037,45 +2921,127 @@ body {
     }
     
     .logo h1 {
-        font-size: 1.3rem;
-    }
-    
-    .cart-icon {
-        width: 45px;
-        height: 45px;
         font-size: 1.1rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .header {
-        padding: 10px 12px;
-    }
-    
-    .logo h1 {
-        font-size: 1.1rem;
-    }
-    
-    .logo {
-        gap: 6px;
-    }
-    
-    .crown-icon {
-        font-size: 1.5rem;
+        white-space: nowrap;
+        max-width: 180px;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
     
     .cart-icon {
         width: 40px;
         height: 40px;
+        font-size: 1.1rem;
     }
     
     .cart-count {
         width: 20px;
         height: 20px;
-        font-size: 0.7rem;
+        font-size: 0.8rem;
+    }
+    
+    .header {
+        padding: 12px 15px;
     }
 }
 
+/* 📱 موبایل کوچک (تا 480px) */
+@media (max-width: 480px) {
+    .logo h1 {
+        font-size: 1rem;
+        max-width: 150px;
+    }
+    
+    .mobile-menu {
+        width: 85%;
+    }
+    
+    .mobile-nav-links a {
+        padding: 15px 20px;
+        font-size: 1rem;
+    }
+}
+
+/* 💻 تبلت (768px تا 1024px) */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .navbar {
+        gap: 15px;
+        flex-wrap: nowrap;
+    }
+    
+    .logo {
+        flex-shrink: 0;
+        min-width: 0;
+    }
+    
+    .logo h1 {
+        font-size: 1.2rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 180px;
+    }
+    
+    .nav-links {
+        display: flex;
+        gap: 4px;
+        flex-wrap: nowrap;
+        overflow: hidden;
+        justify-content: flex-end;
+        flex: 1;
+    }
+    
+    .nav-links a {
+        padding: 8px 10px;
+        font-size: 0.8rem;
+        min-width: 65px;
+        white-space: nowrap;
+        text-align: center;
+    }
+    
+    .mobile-menu,
+    .mobile-overlay {
+        display: none !important;
+    }
+}
+
+/* 🖥️ دسکتاپ (1025px به بالا) */
+@media (min-width: 1025px) {
+    .nav-links {
+        display: flex;
+    }
+    
+    .mobile-menu,
+    .mobile-overlay {
+        display: none !important;
+    }
+    
+    .hamburger-btn {
+        display: none;
+    }
+}
+
+/* 🖥️ دسکتاپ بزرگ (بالای 1200px) */
+@media (min-width: 1200px) {
+    .navbar {
+        gap: 30px;
+    }
+    
+    .nav-links {
+        gap: 10px;
+    }
+    
+    .nav-links a {
+        padding: 10px 20px;
+        font-size: 1rem;
+        min-width: 90px;
+    }
+    
+    .logo h1 {
+        font-size: 1.7rem;
+        max-width: none;
+    }
+}
 /* هیرو */
 @media (max-width: 992px) {
     .hero-content {
@@ -3369,7 +3335,7 @@ body {
 
 @media (max-width: 768px) {
     .products {
-        padding: 70px 15px;
+        padding: 70px 10px;
     }
     
     .products-container {
@@ -3378,10 +3344,15 @@ body {
         padding: 0 10px;
     }
     
-    .product-image {
-        height: 220px;
+    .product-image img {
+        object-fit: contain !important;
+        background: linear-gradient(135deg, 
+            rgba(255,248,225,0.8) 0%, 
+            rgba(255,255,255,0.9) 100%);
+        padding: 15px;
+        border-radius: 8px;
     }
-    
+
     .filter-buttons {
         gap: 8px;
     }
